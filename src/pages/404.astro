@@ -1,0 +1,15 @@
+---
+import Layout from "../layouts/Layout.astro";
+import { profile } from "../data/portfolio";
+---
+
+<Layout title={`404 — ${profile.name}`}>
+  <section class="relative flex min-h-[80svh] items-center justify-center overflow-hidden px-5">
+    <div class="bg-grid pointer-events-none absolute inset-0 opacity-40"></div>
+    <div class="relative text-center">
+      <div class="font-display text-[clamp(5rem,20vw,12rem)] font-bold leading-none gradient-text">404</div>
+      <p class="mt-4 text-muted">This route didn't pass data validation.</p>
+      <a href="/" data-magnetic class="btn btn-primary mt-8">Back to home</a>
+    </div>
+  </section>
+</Layout>

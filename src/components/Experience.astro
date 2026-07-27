@@ -1,0 +1,65 @@
+---
+import SectionHeading from "./SectionHeading.astro";
+import { experiences } from "../data/portfolio";
+---
+
+<section id="experience" class="section relative spotlight">
+  <div class="mx-auto max-w-6xl px-5 sm:px-8">
+    <SectionHeading
+      index="03"
+      eyebrow="Experience"
+      title="Where I've shipped data."
+    />
+
+    <div class="mt-14 max-w-3xl">
+      <div class="relative pl-8 sm:pl-10">
+        <!-- vertical line -->
+        <div class="absolute left-[7px] top-2 bottom-2 w-px bg-gradient-to-b from-brand/60 via-hairline to-transparent sm:left-[11px]"></div>
+
+        {
+          experiences.map((exp, i) => (
+            <div data-reveal data-delay={String(i * 0.05)} class="relative pb-12 last:pb-0">
+              <!-- node -->
+              <span class={`absolute -left-8 top-1.5 grid h-4 w-4 place-items-center rounded-full border-2 sm:-left-10 ${exp.current ? "border-brand bg-brand" : "border-hairline bg-canvas"}`} style={exp.current ? "animation: pulse-ring 2.4s ease-out infinite" : ""}>
+                <span class={`h-1.5 w-1.5 rounded-full ${exp.current ? "bg-canvas" : "bg-faint"}`} />
+              </span>
+
+              <div class="card card-hover p-6 sm:p-7">
+                <div class="flex flex-wrap items-center gap-x-3 gap-y-1">
+                  <h3 class="font-display text-lg font-semibold text-ink sm:text-xl">{exp.role}</h3>
+                  <span class="text-faint">·</span>
+                  <span class="font-semibold text-brand">{exp.company}</span>
+                  {exp.current && (
+                    <span class="rounded-full border border-brand/30 bg-brand/10 px-2.5 py-0.5 font-mono text-[10px] uppercase tracking-wider text-brand">
+                      Current
+                    </span>
+                  )}
+                </div>
+
+                <div class="mt-1.5 flex flex-wrap items-center gap-x-4 gap-y-1 font-mono text-xs text-faint">
+                  <span class="inline-flex items-center gap-1.5">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+                    {exp.period}
+                  </span>
+                  <span class="inline-flex items-center gap-1.5">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                    {exp.location}
+                  </span>
+                </div>
+
+                <ul class="mt-5 space-y-2.5">
+                  {exp.highlights.map((h) => (
+                    <li class="flex gap-3 text-sm leading-relaxed text-muted">
+                      <span class="mt-2 h-1 w-1 shrink-0 rounded-full bg-brand/70" />
+                      <span>{h}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,51 @@
+---
+import SectionHeading from "./SectionHeading.astro";
+import { skillCategories, skills } from "../data/portfolio";
+---
+
+<section id="skills" class="section relative">
+  <div class="mx-auto max-w-6xl px-5 sm:px-8">
+    <SectionHeading
+      index="02"
+      eyebrow="Tech Stack"
+      title="The toolkit behind the pipelines."
+      description="Languages, databases and methods I use daily to extract, model and ship reliable data."
+    />
+
+    <div data-stagger class="mt-12 grid gap-5 sm:grid-cols-2">
+      {
+        skillCategories.map((cat) => {
+          const catSkills = skills.filter((s) => s.category === cat.id);
+          return (
+            <div data-stagger-item class="card card-hover group p-6">
+              <div class="flex items-baseline justify-between gap-4">
+                <h3 class="font-display text-lg font-semibold text-ink">{cat.title}</h3>
+                <span class="font-mono text-xs text-faint group-hover:text-brand transition-colors">
+                  {cat.blurb}
+                </span>
+              </div>
+
+              <div class="mt-6 space-y-4">
+                {catSkills.map((s) => (
+                  <div>
+                    <div class="flex items-center justify-between text-sm">
+                      <span class="text-ink/90">{s.name}</span>
+                      <span class="font-mono text-xs text-faint">{s.level}%</span>
+                    </div>
+                    <div class="mt-1.5 h-1.5 w-full overflow-hidden rounded-full bg-surface-2">
+                      <div
+                        class="skill-fill h-full rounded-full bg-gradient-to-r from-brand to-accent"
+                        data-level={String(s.level)}
+                        style="width: 0%"
+                      />
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          );
+        })
+      }
+    </div>
+  </div>
+</section>

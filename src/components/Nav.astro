@@ -1,0 +1,161 @@
+---
+import { profile } from "../data/portfolio";
+
+const links = [
+  { href: "#about", label: "About" },
+  { href: "#skills", label: "Skills" },
+  { href: "#experience", label: "Experience" },
+  { href: "#projects", label: "Projects" },
+  { href: "#contact", label: "Contact" },
+];
+---
+
+<header
+  data-nav
+  class="fixed inset-x-0 top-0 z-[100] transition-all duration-500"
+>
+  <div class="mx-auto max-w-6xl px-5 sm:px-8">
+    <div
+      class="nav-inner mt-3 flex items-center justify-between rounded-full border border-transparent px-4 py-3 transition-all duration-500"
+    >
+      <!-- Logo -->
+      <a href="#top" class="group flex items-center gap-2.5" data-magnetic>
+        <span
+          class="grid h-9 w-9 place-items-center rounded-xl border border-hairline bg-surface font-display text-sm font-bold text-brand"
+        >
+          VS
+        </span>
+        <span class="hidden font-display text-sm font-semibold tracking-tight sm:block">
+          {profile.name}
+        </span>
+      </a>
+
+      <!-- Desktop links -->
+      <nav class="hidden items-center gap-1 md:flex">
+        {
+          links.map((l) => (
+            <a
+              data-nav-link
+              href={l.href}
+              class="nav-link relative px-3.5 py-2 text-sm text-muted transition-colors hover:text-ink"
+            >
+              {l.label}
+            </a>
+          ))
+        }
+      </nav>
+
+      <!-- CTA -->
+      <div class="flex items-center gap-2">
+        <a
+          href={profile.resumeUrl}
+          target="_blank"
+          rel="noopener"
+          data-magnetic
+          class="btn btn-primary hidden sm:inline-flex"
+        >
+          Resume
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
+        </a>
+
+        <!-- Mobile toggle -->
+        <button
+          data-menu-toggle
+          aria-label="Toggle menu"
+          aria-expanded="false"
+          class="grid h-10 w-10 place-items-center rounded-full border border-hairline bg-surface md:hidden"
+        >
+          <span class="menu-bar block h-0.5 w-5 bg-ink transition-all"></span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Mobile menu -->
+  <div
+    data-menu
+    class="mobile-menu mx-4 mt-2 hidden origin-top flex-col gap-1 rounded-2xl border border-hairline bg-surface/95 p-3 backdrop-blur-xl md:hidden"
+  >
+    {
+      links.map((l) => (
+        <a
+          href={l.href}
+          class="rounded-xl px-4 py-3 text-base text-muted transition-colors hover:bg-surface-2 hover:text-ink"
+        >
+          {l.label}
+        </a>
+      ))
+    }
+    <a
+      href={profile.resumeUrl}
+      target="_blank"
+      rel="noopener"
+      class="btn btn-primary mt-1 justify-center"
+    >
+      Download Resume
+    </a>
+  </div>
+</header>
+
+<style>
+  .nav-inner {
+    backdrop-filter: blur(0);
+  }
+  [data-nav].is-scrolled .nav-inner {
+    border-color: var(--color-hairline);
+    background: color-mix(in srgb, var(--color-canvas) 72%, transparent);
+    backdrop-filter: blur(14px);
+    box-shadow: 0 10px 40px -20px rgba(0, 0, 0, 0.8);
+  }
+
+  .nav-link::after {
+    content: "";
+    position: absolute;
+    left: 14px;
+    right: 14px;
+    bottom: 6px;
+    height: 1.5px;
+    background: var(--color-brand);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.35s var(--ease-out-expo);
+  }
+  .nav-link:hover::after,
+  .nav-link.is-active::after {
+    transform: scaleX(1);
+  }
+  .nav-link.is-active {
+    color: var(--color-ink);
+  }
+
+  /* Mobile toggle becomes an X when open */
+  [data-menu-toggle] .menu-bar,
+  [data-menu-toggle] .menu-bar::before,
+  [data-menu-toggle] .menu-bar::after {
+    content: "";
+    display: block;
+    height: 2px;
+    width: 20px;
+    background: var(--color-ink);
+    border-radius: 2px;
+    transition: transform 0.35s var(--ease-out-expo), opacity 0.2s ease;
+  }
+  [data-menu-toggle] .menu-bar {
+    position: relative;
+  }
+  [data-menu-toggle] .menu-bar::before { transform: translateY(-6px); }
+  [data-menu-toggle] .menu-bar::after { transform: translateY(4px); }
+
+  [data-menu-toggle][aria-expanded="true"] .menu-bar { background: transparent; }
+  [data-menu-toggle][aria-expanded="true"] .menu-bar::before { transform: rotate(45deg); }
+  [data-menu-toggle][aria-expanded="true"] .menu-bar::after { transform: rotate(-45deg); }
+
+  [data-menu].is-open {
+    display: flex;
+    animation: menu-in 0.4s var(--ease-out-expo);
+  }
+  @keyframes menu-in {
+    from { opacity: 0; transform: translateY(-8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+</style>

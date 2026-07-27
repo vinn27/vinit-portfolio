@@ -1,0 +1,89 @@
+---
+import { profile } from "../data/portfolio";
+const roles = JSON.stringify(profile.roles);
+---
+
+<section id="top" class="relative flex min-h-[100svh] items-center overflow-hidden">
+  <!-- Constellation canvas -->
+  <canvas data-constellation class="absolute inset-0 h-full w-full" aria-hidden="true"></canvas>
+
+  <!-- Background layers -->
+  <div class="bg-grid pointer-events-none absolute inset-0 opacity-60 [mask-image:radial-gradient(70%_60%_at_50%_40%,#000,transparent)]"></div>
+  <div class="pointer-events-none absolute inset-0 bg-gradient-to-b from-canvas/0 via-canvas/40 to-canvas"></div>
+
+  <div class="relative z-10 mx-auto w-full max-w-6xl px-5 pt-28 pb-20 sm:px-8">
+    <div class="max-w-3xl">
+      <!-- Availability chip -->
+      <div data-reveal class="mb-6 inline-flex items-center gap-2.5 rounded-full border border-hairline bg-surface/60 py-1.5 pl-2 pr-4 backdrop-blur">
+        <span class="relative flex h-2.5 w-2.5">
+          <span class="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-70"></span>
+          <span class="relative inline-flex h-2.5 w-2.5 rounded-full bg-emerald-400"></span>
+        </span>
+        <span class="font-mono text-xs tracking-wide text-muted">
+          {profile.available ? "Open to Data Engineering roles" : "Currently engaged"}
+        </span>
+      </div>
+
+      <!-- Name -->
+      <h1 class="font-display text-[clamp(2.6rem,9vw,6.2rem)] font-bold leading-[0.95] tracking-tight">
+        <span class="block overflow-hidden">
+          <span data-reveal class="block">{profile.name.split(" ")[0]}</span>
+        </span>
+        <span class="block overflow-hidden">
+          <span data-reveal data-delay="0.1" class="block gradient-text">
+            {profile.name.split(" ").slice(1).join(" ")}
+          </span>
+        </span>
+      </h1>
+
+      <!-- Role rotator -->
+      <div data-reveal data-delay="0.2" class="mt-5 flex items-center gap-2 font-mono text-base text-muted sm:text-lg">
+        <span class="text-brand">&gt;</span>
+        <span
+          data-role
+          data-roles={roles}
+          class="text-ink"
+        >{profile.roles[0]}</span>
+        <span class="cursor-blink inline-block h-5 w-[2px] bg-brand align-middle"></span>
+      </div>
+
+      <!-- Tagline -->
+      <p data-reveal data-delay="0.3" class="mt-6 max-w-xl text-balance text-base leading-relaxed text-muted sm:text-lg">
+        {profile.tagline}
+      </p>
+
+      <!-- CTAs -->
+      <div data-reveal data-delay="0.4" class="mt-9 flex flex-wrap items-center gap-3">
+        <a href="#projects" data-magnetic class="btn btn-primary">
+          View My Work
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </a>
+        <a href="#contact" data-magnetic class="btn btn-ghost">Get in Touch</a>
+      </div>
+
+      <!-- Quick meta -->
+      <div data-reveal data-delay="0.5" class="mt-12 flex flex-wrap items-center gap-x-8 gap-y-3 text-sm text-faint">
+        <span class="inline-flex items-center gap-2">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+          {profile.location}
+        </span>
+        <a href={`mailto:${profile.email}`} class="inline-flex items-center gap-2 transition-colors hover:text-ink">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-10 6L2 7"/></svg>
+          {profile.email}
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scroll indicator -->
+  <a
+    href="#about"
+    class="absolute bottom-7 left-1/2 z-10 hidden -translate-x-1/2 flex-col items-center gap-2 text-faint transition-colors hover:text-ink sm:flex"
+    aria-label="Scroll down"
+  >
+    <span class="font-mono text-[10px] tracking-[0.3em] uppercase">Scroll</span>
+    <span class="relative flex h-9 w-5 justify-center rounded-full border border-hairline pt-1.5">
+      <span class="block h-1.5 w-1 rounded-full bg-brand" style="animation: scroll-dot 1.6s var(--ease-out-expo) infinite"></span>
+    </span>
+  </a>
+</section>

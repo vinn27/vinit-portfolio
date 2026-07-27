@@ -1,0 +1,64 @@
+---
+import SectionHeading from "./SectionHeading.astro";
+import { about, stats, profile } from "../data/portfolio";
+---
+
+<section id="about" class="section relative spotlight">
+  <div class="mx-auto max-w-6xl px-5 sm:px-8">
+    <SectionHeading
+      index="01"
+      eyebrow="About"
+      title="Engineering clean data, end to end."
+    />
+
+    <div class="mt-12 grid gap-12 lg:grid-cols-[1.1fr_0.9fr] lg:gap-16">
+      <!-- Bio -->
+      <div class="space-y-5">
+        {
+          about.map((p, i) => (
+            <p
+              data-reveal
+              data-delay={String(i * 0.08)}
+              class="text-balance text-base leading-relaxed text-muted sm:text-lg"
+            >
+              {p}
+            </p>
+          ))
+        }
+
+        <div data-reveal data-delay="0.3" class="flex flex-wrap gap-2 pt-2">
+          <span class="tag">ETL / ELT</span>
+          <span class="tag">Data Warehousing</span>
+          <span class="tag">Star Schema</span>
+          <span class="tag">Data Quality</span>
+          <span class="tag">Analytics</span>
+        </div>
+      </div>
+
+      <!-- Stat cards -->
+      <div data-stagger class="grid grid-cols-2 gap-4 self-start">
+        {
+          stats.map((s) => (
+            <div data-stagger-item class="card card-hover p-5">
+              <div class="font-display text-3xl font-bold text-ink sm:text-4xl">
+                <span data-counter={String(s.value)}>0</span>
+                {s.suffix && <span class="text-brand">{s.suffix}</span>}
+              </div>
+              <div class="mt-1 font-mono text-xs leading-snug text-faint">{s.label}</div>
+            </div>
+          ))
+        }
+        <!-- Profile tile -->
+        <div data-stagger-item class="card col-span-2 flex items-center gap-4 p-5">
+          <div class="grid h-11 w-11 shrink-0 place-items-center rounded-xl bg-gradient-to-br from-brand to-accent font-display text-lg font-bold text-[#04141a]">
+            {profile.name.split(" ").map((n) => n[0]).join("")}
+          </div>
+          <div>
+            <div class="text-sm font-semibold text-ink">{profile.fullName}</div>
+            <div class="font-mono text-xs text-faint">{profile.role} · {profile.location}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
