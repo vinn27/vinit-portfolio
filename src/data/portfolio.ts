@@ -18,7 +18,7 @@ export const profile = {
   available: true,
   // 👇 Replace these with your real profile URLs.
   socials: {
-    github: "https://github.com/",
+    github: "https://github.com/vinn27",
     linkedin: "https://www.linkedin.com/",
   },
   resumeUrl: "/resume.pdf",
@@ -123,6 +123,19 @@ export type Project = {
 };
 
 export const projects: Project[] = [
+  {
+    name: "Job Radar — Job-Market Intelligence Pipeline",
+    tagline: "Scrape → dedupe → score → notify, 24/7",
+    description:
+      "Self-running pipeline that tracks LinkedIn + Naukri every hour: postings are collected politely, deduplicated across runs (job-id + fuzzy title|company + emailed-ledger), scored against a weighted skill profile, and delivered as ranked email digests with apply links. Split across a free GitHub Actions cloud runner (works even with my PC off) and a local Playwright runner that passes Naukri's anti-bot defenses.",
+    stack: ["Python", "Playwright", "SQLite", "GitHub Actions"],
+    metrics: [
+      { label: "Runs / Day", value: "~40" },
+      { label: "Cost", value: "₹0" },
+    ],
+    accent: "from-rose-400 to-red-500",
+    link: "https://github.com/vinn27/job-radar",
+  },
   {
     name: "Stock Market ETL — Medallion Architecture",
     tagline: "Bronze → Silver → Gold pipeline",
