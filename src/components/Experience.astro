@@ -13,8 +13,8 @@ import { experiences } from "../data/portfolio";
 
     <div class="mt-14 max-w-3xl">
       <div class="relative pl-8 sm:pl-10">
-        <!-- vertical line -->
-        <div class="absolute left-[7px] top-2 bottom-2 w-px bg-gradient-to-b from-brand/60 via-hairline to-transparent sm:left-[11px]"></div>
+        <!-- vertical line (drawn on scroll) -->
+        <div data-timeline class="absolute left-[7px] top-2 bottom-2 w-px bg-gradient-to-b from-brand/60 via-hairline to-transparent sm:left-[11px]"></div>
 
         {
           experiences.map((exp, i) => (

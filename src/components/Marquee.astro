@@ -1,0 +1,39 @@
+---
+// Infinite-scrolling tech strip between sections. Pure CSS animation,
+// pauses on hover, hidden from screen readers (decorative).
+const items = [
+  "SAP S/4HANA",
+  "ADLS Gen2",
+  "Azure Data Factory",
+  "Snowflake",
+  "Snowpark",
+  "SQL / T-SQL",
+  "Python",
+  "Pandas",
+  "PySpark",
+  "Redpanda / Kafka",
+  "MySQL",
+  "Power BI",
+  "Databricks",
+  "AWS",
+  "Git",
+  "GitHub Actions",
+];
+---
+
+<section class="marquee-section" aria-hidden="true">
+  <div class="marquee-track">
+    {
+      [0, 1].map(() => (
+        <div class="marquee-group">
+          {items.map((t) => (
+            <span>
+              <span class="marquee-dot" />
+              {t}
+            </span>
+          ))}
+        </div>
+      ))
+    }
+  </div>
+</section>

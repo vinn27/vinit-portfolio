@@ -186,6 +186,55 @@ function initMagnetic() {
   });
 }
 
+/* --------------------------------------------------- 3D tilt + glare */
+function initCardFX() {
+  if (coarse || reduced) return;
+  gsap.utils.toArray<HTMLElement>("[data-tilt]").forEach((card) => {
+    gsap.set(card, { transformPerspective: 900 });
+    const rx = gsap.quickTo(card, "rotationX", { duration: 0.6, ease: "power3.out" });
+    const ry = gsap.quickTo(card, "rotationY", { duration: 0.6, ease: "power3.out" });
+    const yTo = gsap.quickTo(card, "y", { duration: 0.5, ease: "power3.out" });
+
+    card.addEventListener("pointermove", (e) => {
+      const r = card.getBoundingClientRect();
+      const nx = (e.clientX - r.left) / r.width;
+      const ny = (e.clientY - r.top) / r.height;
+      ry((nx - 0.5) * 7);
+      rx(-(ny - 0.5) * 7);
+      yTo(-3);
+      // glare position for the CSS ::after layer
+      card.style.setProperty("--mx", `${nx * 100}%`);
+      card.style.setProperty("--my", `${ny * 100}%`);
+    });
+    card.addEventListener("pointerleave", () => {
+      rx(0);
+      ry(0);
+      yTo(0);
+    });
+  });
+}
+
+/* ------------------------------------- Experience timeline line draw */
+function initTimeline() {
+  const line = document.querySelector<HTMLElement>("[data-timeline]");
+  if (!line) return;
+  gsap.fromTo(
+    line,
+    { scaleY: 0 },
+    {
+      scaleY: 1,
+      ease: "none",
+      transformOrigin: "top center",
+      scrollTrigger: {
+        trigger: line.parentElement,
+        start: "top 75%",
+        end: "bottom 55%",
+        scrub: 0.6,
+      },
+    }
+  );
+}
+
 /* ------------------------------------------------------ Role rotator */
 function initRoleRotator() {
   const el = document.querySelector<HTMLElement>("[data-role]");
@@ -418,6 +467,8 @@ function boot() {
   initSkills();
   initCursor();
   initMagnetic();
+  initCardFX();
+  initTimeline();
   initRoleRotator();
   initNav();
   initConstellation();

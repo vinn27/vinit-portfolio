@@ -94,11 +94,14 @@
       100deg,
       var(--color-ink) 0%,
       var(--color-brand) 45%,
-      var(--color-accent) 100%
+      var(--color-accent) 80%,
+      var(--color-ink) 100%
     );
+    background-size: 220% 100%;
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
+    animation: gradient-pan 7s ease-in-out infinite alternate;
   }
 
   .text-balance { text-wrap: balance; }
@@ -194,6 +197,126 @@
     background: rgba(255,255,255,0.02);
     white-space: nowrap;
   }
+
+  /* Featured project card — surface behind an animated conic border */
+  .card-featured {
+    position: relative;
+    border-radius: 1rem;
+    border: 1px solid transparent;
+    background:
+      linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0)) padding-box,
+      linear-gradient(var(--color-surface), var(--color-surface)) padding-box,
+      conic-gradient(
+        from var(--angle, 0deg),
+        var(--color-brand),
+        var(--color-accent),
+        var(--color-brand-2),
+        var(--color-brand)
+      ) border-box;
+    animation: spin-angle 7s linear infinite;
+    transition: box-shadow 0.5s ease;
+  }
+  .card-featured:hover {
+    box-shadow: 0 20px 60px -20px color-mix(in srgb, var(--color-brand) 25%, transparent);
+  }
+
+  /* LIVE pill on the featured project */
+  .live-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    padding: 0.22rem 0.6rem;
+    border-radius: 999px;
+    border: 1px solid rgba(52, 211, 153, 0.35);
+    background: rgba(16, 185, 129, 0.1);
+    font-family: var(--font-mono);
+    font-size: 0.62rem;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    color: #34d399;
+    transition: background 0.3s ease, border-color 0.3s ease;
+  }
+  .live-badge:hover {
+    background: rgba(16, 185, 129, 0.2);
+    border-color: rgba(52, 211, 153, 0.7);
+  }
+
+  /* Animated "data flowing" connector between pipeline steps */
+  .flow-dash {
+    background-image: repeating-linear-gradient(
+      90deg,
+      var(--color-brand) 0 4px,
+      transparent 4px 8px
+    );
+    animation: flow-dash 0.7s linear infinite;
+    vertical-align: middle;
+  }
+
+  /* Tech marquee strip */
+  .marquee-section {
+    padding-block: 1.1rem;
+    overflow: hidden;
+    border-block: 1px solid var(--color-hairline);
+    background: color-mix(in srgb, var(--color-surface) 45%, transparent);
+    -webkit-mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+    mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+  }
+  .marquee-track {
+    display: flex;
+    width: max-content;
+    animation: marquee 38s linear infinite;
+  }
+  .marquee-section:hover .marquee-track {
+    animation-play-state: paused;
+  }
+  .marquee-group {
+    display: flex;
+    align-items: center;
+    gap: 2.75rem;
+    padding-right: 2.75rem;
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    color: var(--color-muted);
+    white-space: nowrap;
+  }
+  .marquee-group span {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+    transition: color 0.3s ease;
+  }
+  .marquee-group span:hover {
+    color: var(--color-brand);
+  }
+  .marquee-dot {
+    width: 4px;
+    height: 4px;
+    border-radius: 999px;
+    background: var(--color-brand);
+    opacity: 0.7;
+    flex-shrink: 0;
+  }
+}
+
+/* Animated conic-border angle (graceful fallback: static gradient) */
+@property --angle {
+  syntax: "<angle>";
+  initial-value: 0deg;
+  inherits: false;
+}
+@keyframes spin-angle {
+  to { --angle: 360deg; }
+}
+@keyframes flow-dash {
+  to { background-position: -8px 0; }
+}
+@keyframes marquee {
+  to { transform: translateX(-50%); }
+}
+@keyframes gradient-pan {
+  to { background-position: 100% 0; }
 }
 
 /* ===========================================================================
@@ -222,7 +345,35 @@
 }
 
 .anim-float { animation: float-y 6s ease-in-out infinite; }
+.anim-float-slow { animation: float-y 9s ease-in-out -3s infinite; }
 .cursor-blink { animation: blink 1.05s step-end infinite; }
+
+/* 3D-tilt cards: cursor-tracking glare layer (JS sets --mx / --my) */
+[data-tilt] {
+  transform-style: preserve-3d;
+  will-change: transform;
+}
+[data-tilt]::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  background: radial-gradient(
+    340px circle at var(--mx, 50%) var(--my, 50%),
+    rgba(255, 255, 255, 0.07),
+    transparent 65%
+  );
+  opacity: 0;
+  transition: opacity 0.45s ease;
+  z-index: 1;
+}
+[data-tilt]:hover::after {
+  opacity: 1;
+}
+@media (pointer: coarse) {
+  [data-tilt]::after { display: none; }
+}
 
 /* Reveal-on-scroll: initial hidden state (GSAP animates to visible) */
 [data-reveal] {
