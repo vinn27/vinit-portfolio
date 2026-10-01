@@ -34,7 +34,7 @@ export const about = [
 export const stats: { value: number; suffix?: string; label: string }[] = [
   { value: 1, suffix: "+", label: "Year Experience" },
   { value: 602, suffix: "K", label: "Rows Processed" },
-  { value: 6, suffix: "+", label: "ETL Pipelines Built" },
+  { value: 5, suffix: "+", label: "ETL Pipelines Built" },
   { value: 24, suffix: "/7", label: "Streaming Pipeline Live" },
 ];
 
@@ -197,18 +197,6 @@ export const projects: Project[] = [
       { label: "Sink", value: "MySQL" },
     ],
     accent: "from-teal-400 to-emerald-500",
-  },
-  {
-    name: "Finance Data Pipeline",
-    tagline: "Alpha Vantage → PySpark",
-    description:
-      "Distributed processing of financial market data pulled from the Alpha Vantage API using PySpark — extracting, transforming and aggregating ticker-level data at scale.",
-    stack: ["PySpark", "Alpha Vantage", "Python", "Aggregations"],
-    metrics: [
-      { label: "Engine", value: "PySpark" },
-      { label: "Source", value: "API" },
-    ],
-    accent: "from-amber-400 to-orange-500",
   },
 ];
 
