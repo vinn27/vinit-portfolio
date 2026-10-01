@@ -171,6 +171,7 @@ export const projects: Project[] = [
       { label: "Architecture", value: "Medallion" },
     ],
     accent: "from-cyan-400 to-blue-500",
+    link: "https://github.com/vinn27/stock-market-etl",
   },
   {
     name: "Employment Job Market Analytics",
