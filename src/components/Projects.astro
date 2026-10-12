@@ -2,7 +2,6 @@
 import SectionHeading from "./SectionHeading.astro";
 import { projects } from "../data/portfolio";
 
-const flow = ["Wikipedia API", "Redpanda", "PySpark", "Neon Postgres", "Live Dashboard"];
 const featured = projects.find((p) => p.featured);
 const rest = projects.filter((p) => !p.featured);
 ---
@@ -61,17 +60,25 @@ const rest = projects.filter((p) => !p.featured);
               </p>
 
               {/* animated data-flow diagram */}
-              <div class="mt-6 flex flex-wrap items-center gap-y-2 rounded-xl border border-hairline bg-surface-2/60 px-4 py-3">
-                <span class="mr-3 font-mono text-[10px] uppercase tracking-[0.2em] text-faint">flow</span>
-                {flow.map((step, i) => (
-                  <span class="flex items-center">
-                    <span class={`rounded-md border px-2.5 py-1 font-mono text-[11px] ${i === flow.length - 1 ? "border-emerald-400/40 bg-emerald-400/10 text-emerald-300" : "border-hairline bg-surface text-muted"}`}>
-                      {step}
+              {featured.flow && (
+                <div class="mt-6 flex flex-wrap items-center gap-y-2 rounded-xl border border-hairline bg-surface-2/60 px-4 py-3">
+                  <span class="mr-3 font-mono text-[10px] uppercase tracking-[0.2em] text-faint">flow</span>
+                  {featured.flow.map((step, i) => (
+                    <span class="flex items-center">
+                      <span class={`rounded-md border px-2.5 py-1 font-mono text-[11px] ${i === featured.flow!.length - 1 ? "border-emerald-400/40 bg-emerald-400/10 text-emerald-300" : "border-hairline bg-surface text-muted"}`}>
+                        {step}
+                      </span>
+                      {i < featured.flow!.length - 1 && (
+                        <span
+                          class="flow-dash mx-2.5 inline-block h-px w-6 sm:w-8"
+                          style={`animation-delay:${i * 0.3}s`}
+                          aria-hidden="true"
+                        />
+                      )}
                     </span>
-                    {i < flow.length - 1 && <span class="flow-dash mx-2.5 inline-block h-px w-6 sm:w-8" aria-hidden="true" />}
-                  </span>
-                ))}
-              </div>
+                  ))}
+                </div>
+              )}
 
               {/* metrics */}
               <div class="mt-6 flex flex-wrap gap-2.5">
@@ -120,7 +127,18 @@ const rest = projects.filter((p) => !p.featured);
             <div class="relative">
               <div class="flex items-start justify-between gap-4">
                 <div>
-                  <div class="font-mono text-xs text-faint">{p.tagline}</div>
+                  <div class="flex flex-wrap items-center gap-2.5">
+                    <div class="font-mono text-xs text-faint">{p.tagline}</div>
+                    {p.liveUrl && (
+                      <a href={p.liveUrl} target="_blank" rel="noopener" class="live-badge" aria-label={`Open ${p.name} live`}>
+                        <span class="relative flex h-2 w-2">
+                          <span class="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-70" />
+                          <span class="relative inline-flex h-2 w-2 rounded-full bg-emerald-400" />
+                        </span>
+                        LIVE
+                      </a>
+                    )}
+                  </div>
                   <h3 class="mt-1.5 font-display text-lg font-semibold text-ink sm:text-xl">
                     {p.name}
                   </h3>

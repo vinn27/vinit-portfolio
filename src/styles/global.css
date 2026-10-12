@@ -241,8 +241,10 @@
     border-color: rgba(52, 211, 153, 0.7);
   }
 
-  /* Animated "data flowing" connector between pipeline steps */
+  /* Animated "data flowing" connector between pipeline steps:
+     dashed line + a glowing packet traveling along it */
   .flow-dash {
+    position: relative;
     background-image: repeating-linear-gradient(
       90deg,
       var(--color-brand) 0 4px,
@@ -250,6 +252,20 @@
     );
     animation: flow-dash 0.7s linear infinite;
     vertical-align: middle;
+  }
+  .flow-dash::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 0;
+    width: 5px;
+    height: 5px;
+    margin-top: -2.5px;
+    border-radius: 999px;
+    background: var(--color-brand);
+    box-shadow: 0 0 8px var(--color-brand), 0 0 16px color-mix(in srgb, var(--color-brand) 60%, transparent);
+    animation: flow-packet 1.5s linear infinite;
+    animation-delay: inherit;
   }
 
   /* Tech marquee strip */
@@ -311,6 +327,12 @@
 }
 @keyframes flow-dash {
   to { background-position: -8px 0; }
+}
+@keyframes flow-packet {
+  0% { left: 0; opacity: 0; }
+  18% { opacity: 1; }
+  82% { opacity: 1; }
+  100% { left: 100%; opacity: 0; }
 }
 @keyframes marquee {
   to { transform: translateX(-50%); }

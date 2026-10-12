@@ -459,6 +459,80 @@ function initConstellation() {
   }
 }
 
+/* ------------------------------------------ Hero pipeline terminal */
+function initTerminal() {
+  const term = document.querySelector<HTMLElement>("[data-terminal]");
+  if (!term) return;
+
+  const cmd = term.dataset.cmd || "";
+  const cmdEl = term.querySelector<HTMLElement>("[data-term-cmd]");
+  const stages = Array.from(term.querySelectorAll<HTMLElement>("[data-term-stage]"));
+  const statusEl = term.querySelector<HTMLElement>("[data-term-status]");
+  const statusText = term.querySelector<HTMLElement>("[data-term-status-text]");
+
+  const setPass = (pass: boolean) => {
+    statusEl?.classList.toggle("is-pass", pass);
+    term.classList.toggle("is-complete", pass);
+    if (statusText) statusText.textContent = pass ? "PASS" : "RUNNING";
+  };
+
+  // Reduced motion: render the finished run statically.
+  if (reduced) {
+    term.classList.add("is-static");
+    if (cmdEl) cmdEl.textContent = cmd;
+    stages.forEach((s) => s.classList.add("is-done"));
+    setPass(true);
+    return;
+  }
+
+  if (!cmdEl) return;
+
+  const reset = () => {
+    cmdEl.textContent = "";
+    stages.forEach((s) => s.classList.remove("is-done"));
+    setPass(false);
+  };
+
+  const tl = gsap.timeline({ repeat: -1, repeatDelay: 4.2, delay: 0.9, onRepeat: reset });
+
+  // 1 — type the command
+  const typed = { n: 0 };
+  tl.to(typed, {
+    n: cmd.length,
+    duration: 1.1,
+    ease: "none",
+    onUpdate: () => {
+      cmdEl.textContent = cmd.slice(0, Math.round(typed.n));
+    },
+  });
+  tl.to({}, { duration: 0.35 });
+
+  // 2 — run each stage
+  stages.forEach((stage) => {
+    tl.call(() => stage.classList.add("is-done"));
+    tl.to({}, { duration: 0.55 });
+  });
+
+  // 3 — healthy
+  tl.call(() => setPass(true));
+}
+
+/* --------------------------------------------------- Live IST clock */
+function initClock() {
+  const el = document.querySelector<HTMLElement>("[data-clock]");
+  if (!el) return;
+  const fmt = new Intl.DateTimeFormat("en-GB", {
+    hour: "2-digit",
+    minute: "2-digit",
+    timeZone: "Asia/Kolkata",
+  });
+  const tick = () => {
+    el.textContent = fmt.format(new Date());
+  };
+  tick();
+  setInterval(tick, 15000);
+}
+
 /* ------------------------------------------------------------- Boot */
 function boot() {
   document.documentElement.classList.remove("no-js");
@@ -472,6 +546,8 @@ function boot() {
   initRoleRotator();
   initNav();
   initConstellation();
+  initTerminal();
+  initClock();
   // Make sure triggers compute correct positions after layout/fonts
   window.addEventListener("load", () => ScrollTrigger.refresh());
 }

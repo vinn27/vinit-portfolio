@@ -1,0 +1,201 @@
+---
+// Decorative looping "dbt build" run log — the pipeline monitor in the hero.
+// Animated by initTerminal() in src/scripts/main.ts; shows a static completed
+// run when prefers-reduced-motion is set. Hidden from screen readers.
+const cmd = "dbt build --select crypto_market_elt";
+const stages = [
+  { cmd: "extract", target: "CoinGecko API · top 50 coins", time: "0.8s" },
+  { cmd: "load", target: "Snowflake RAW · 910 rows", time: "1.2s" },
+  { cmd: "stage", target: "stg_coins · stg_market_chart", time: "0.9s" },
+  { cmd: "model", target: "fact_market_snapshots + 2 dims", time: "1.4s" },
+  { cmd: "test", target: "not_null · unique · relationships", time: "0.6s" },
+];
+---
+
+<div class="terminal" data-terminal data-cmd={cmd} aria-hidden="true">
+  <div class="term-bar">
+    <span class="dot dot-r"></span>
+    <span class="dot dot-y"></span>
+    <span class="dot dot-g"></span>
+    <span class="term-title">vinn27@warehouse — pipeline.log</span>
+    <span class="term-status" data-term-status><i></i><span data-term-status-text>RUNNING</span></span>
+  </div>
+
+  <div class="term-body">
+    <div class="term-line">
+      <span class="term-prompt">$</span>
+      <span class="term-cmdtext"><span data-term-cmd></span><span class="cursor-blink term-caret"></span></span>
+    </div>
+
+    {stages.map((s) => (
+      <div class="term-line term-stage" data-term-stage>
+        <span class="term-ico term-ok">✓</span>
+        <span class="term-ico term-wait">◌</span>
+        <span class="term-name">{s.cmd}</span>
+        <span class="term-target">{s.target}</span>
+        <span class="term-time" data-term-time>{s.time}</span>
+      </div>
+    ))}
+
+    <div class="term-line term-done" data-term-done>
+      <span class="term-led"></span>
+      <span>pipeline healthy — 20/20 tests passed · next run 06:35 IST</span>
+    </div>
+  </div>
+</div>
+
+<style>
+  .terminal {
+    position: relative;
+    border-radius: 1rem;
+    border: 1px solid var(--color-hairline);
+    background:
+      linear-gradient(180deg, rgba(255, 255, 255, 0.035), rgba(255, 255, 255, 0.008)),
+      rgba(10, 12, 17, 0.88);
+    backdrop-filter: blur(12px);
+    box-shadow:
+      0 30px 80px -30px rgba(0, 0, 0, 0.75),
+      0 0 60px -30px color-mix(in srgb, var(--color-brand) 30%, transparent),
+      inset 0 1px 0 rgba(255, 255, 255, 0.04);
+    overflow: hidden;
+    transform: rotate(1.2deg);
+  }
+
+  /* faint CRT scanlines */
+  .terminal::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background: repeating-linear-gradient(
+      180deg,
+      rgba(255, 255, 255, 0.022) 0 1px,
+      transparent 1px 3px
+    );
+  }
+
+  .term-bar {
+    display: flex;
+    align-items: center;
+    gap: 0.45rem;
+    padding: 0.7rem 1rem;
+    border-bottom: 1px solid var(--color-hairline);
+    background: rgba(255, 255, 255, 0.02);
+  }
+  .dot { width: 10px; height: 10px; border-radius: 999px; opacity: 0.8; }
+  .dot-r { background: #ff5f57; }
+  .dot-y { background: #febc2e; }
+  .dot-g { background: #28c840; }
+
+  .term-title {
+    margin-left: 0.5rem;
+    font-family: var(--font-mono);
+    font-size: 0.66rem;
+    letter-spacing: 0.06em;
+    color: var(--color-faint);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .term-status {
+    margin-left: auto;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-family: var(--font-mono);
+    font-size: 0.6rem;
+    font-weight: 600;
+    letter-spacing: 0.16em;
+    color: #fbbf24;
+  }
+  .term-status i {
+    width: 6px;
+    height: 6px;
+    border-radius: 999px;
+    background: currentColor;
+    box-shadow: 0 0 8px currentColor;
+    animation: term-blink-led 1s ease-in-out infinite;
+  }
+  .term-status.is-pass { color: #34d399; }
+  .term-status.is-pass i { animation: none; }
+
+  .term-body {
+    padding: 1rem 1.1rem 1.15rem;
+    font-family: var(--font-mono);
+    font-size: 0.76rem;
+    line-height: 2;
+  }
+
+  .term-line {
+    display: flex;
+    align-items: baseline;
+    gap: 0.6rem;
+    white-space: nowrap;
+    overflow: hidden;
+  }
+
+  .term-prompt { color: var(--color-brand); }
+  .term-cmdtext { color: var(--color-ink); }
+  .term-caret {
+    display: inline-block;
+    width: 7px;
+    height: 0.85em;
+    background: var(--color-brand);
+    vertical-align: text-bottom;
+    margin-left: 2px;
+  }
+
+  .term-stage { color: var(--color-faint); }
+  .term-stage .term-ok { display: none; color: #34d399; }
+  .term-stage .term-wait { display: inline-block; color: var(--color-faint); animation: term-spin 1.6s linear infinite; }
+  .term-stage.is-done { color: var(--color-muted); }
+  .term-stage.is-done .term-ok { display: inline-block; }
+  .term-stage.is-done .term-wait { display: none; }
+  .term-ico { width: 0.9rem; flex-shrink: 0; }
+  .term-name { color: var(--color-brand); width: 3.4rem; flex-shrink: 0; }
+  .term-target { flex: 1; overflow: hidden; text-overflow: ellipsis; }
+  .term-time { color: var(--color-faint); font-size: 0.68rem; opacity: 0; transition: opacity 0.3s ease; }
+  .term-stage.is-done .term-time { opacity: 1; }
+
+  .term-done {
+    margin-top: 0.7rem;
+    padding-top: 0.65rem;
+    border-top: 1px dashed var(--color-hairline);
+    color: #34d399;
+    opacity: 0;
+    transform: translateY(4px);
+    transition: opacity 0.5s ease, transform 0.5s var(--ease-out-expo);
+    align-items: center;
+    font-size: 0.72rem;
+  }
+  .terminal.is-complete .term-done { opacity: 1; transform: translateY(0); }
+  .term-led {
+    width: 7px;
+    height: 7px;
+    border-radius: 999px;
+    background: #34d399;
+    box-shadow: 0 0 10px rgba(52, 211, 153, 0.7);
+    flex-shrink: 0;
+    animation: term-blink-led 1.6s ease-in-out infinite;
+  }
+
+  /* Static completed run (reduced motion) */
+  .terminal.is-static .term-stage { color: var(--color-muted); }
+  .terminal.is-static .term-stage .term-ok { display: inline-block; }
+  .terminal.is-static .term-stage .term-wait { display: none; }
+  .terminal.is-static .term-time { opacity: 1; }
+  .terminal.is-static .term-done { opacity: 1; transform: none; }
+
+  @keyframes term-blink-led {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.35; }
+  }
+  @keyframes term-spin {
+    to { transform: rotate(360deg); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .term-status i, .term-led { animation: none; }
+  }
+</style>

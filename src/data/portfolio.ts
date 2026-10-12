@@ -10,31 +10,30 @@ export const profile = {
   // Rotating words shown next to the role in the hero.
   roles: ["Data Engineer", "ETL / ELT Developer", "Data Modeler", "Analytics Engineer"],
   tagline:
-    "I turn messy, multi-source data into clean, analysis-ready pipelines — from SAP & ADLS through Snowflake to the reports teams actually use.",
+    "I turn messy, multi-source data into clean, analysis-ready pipelines — from APIs, SAP & ADLS through Snowflake and dbt to the reports teams actually use.",
   location: "Pune, India",
   email: "vinitsontakke27@gmail.com",
   phone: "+91 78877 13347",
   phoneHref: "+917887713347",
   available: true,
-  // 👇 Replace these with your real profile URLs.
   socials: {
     github: "https://github.com/vinn27",
-    linkedin: "https://www.linkedin.com/",
+    linkedin: "https://www.linkedin.com/in/vinit-sontakke",
   },
   resumeUrl: "/resume.pdf",
 };
 
 export const about = [
   "Data Engineer with 1+ years of hands-on experience in ETL/ELT, SQL, Python and Snowflake — building data-integration workflows that pull from SAP S/4HANA and ADLS Gen2, orchestrated with Azure Data Factory.",
-  "I specialize in SQL transformations, data cleansing, incremental (CDC) processing and data-quality validation — with a strong foundation in data warehousing, Star Schema modeling and source-to-target reconciliation.",
-  "Beyond the day job I build end-to-end data projects for fun: streaming live Wikipedia edits through Redpanda and PySpark, modeling real datasets into star schemas, and shipping dashboards on top.",
+  "I specialize in SQL transformations, data cleansing, incremental (CDC) processing and data-quality validation — with a strong foundation in data warehousing, Star Schema modeling, dbt testing and source-to-target reconciliation.",
+  "Beyond the day job I ship end-to-end data products: a fully automated Snowflake + dbt crypto analytics pipeline with 20/20 tests passing on every daily run, and a serverless platform streaming live Wikipedia edits through Redpanda and PySpark.",
 ];
 
 // Headline stats — animated counters. All values are real from project work.
 export const stats: { value: number; suffix?: string; label: string }[] = [
   { value: 1, suffix: "+", label: "Year Experience" },
   { value: 602, suffix: "K", label: "Rows Processed" },
-  { value: 5, suffix: "+", label: "ETL Pipelines Built" },
+  { value: 6, suffix: "+", label: "ETL Pipelines Built" },
   { value: 24, suffix: "/7", label: "Streaming Pipeline Live" },
 ];
 
@@ -53,6 +52,7 @@ export const skills: Skill[] = [
   { name: "Python (Pandas)", level: 88, category: "etl" },
   { name: "PySpark", level: 76, category: "etl" },
   { name: "CDC & Incremental Loading", level: 78, category: "etl" },
+  { name: "dbt Core", level: 75, category: "etl" },
   { name: "Snowpark Python", level: 72, category: "etl" },
 
   { name: "SQL Server (SSMS)", level: 86, category: "tools" },
@@ -72,6 +72,7 @@ export const skills: Skill[] = [
   { name: "SAP S/4HANA", level: 72, category: "cloud" },
   { name: "REST APIs", level: 80, category: "cloud" },
   { name: "Git", level: 86, category: "cloud" },
+  { name: "GitHub Actions (CI/CD)", level: 78, category: "cloud" },
   { name: "Agile / Scrum", level: 82, category: "cloud" },
   { name: "SDLC & Testing", level: 80, category: "cloud" },
 ];
@@ -125,12 +126,30 @@ export type Project = {
   stack: string[];
   metrics: { label: string; value: string }[];
   accent: string; // tailwind-ish gradient hint
+  flow?: string[]; // pipeline stages rendered as an animated flow strip
   link?: string;
   liveUrl?: string; // live deployment (shows a LIVE badge + CTA)
   featured?: boolean; // renders as a full-width highlight card
 };
 
 export const projects: Project[] = [
+  {
+    name: "Crypto Market ELT — Snowflake + dbt Analytics Pipeline",
+    tagline: "Modern ELT stack: layered warehouse, tested models, zero ops",
+    description:
+      "A fully automated crypto analytics platform: Python extracts top-50 market data from the CoinGecko API (retry + rate-limit aware) into layered Snowflake schemas — RAW → STAGING → MARTS — where dbt models it into a tested star schema (fact_market_snapshots, dim_coins, dim_date). 20/20 data-quality tests pass on every build, GitHub Actions runs the whole pipeline daily, and an interactive dashboard with live pipeline stats deploys itself to Netlify. Warehouse governance (auto-suspend, query timeouts) baked in.",
+    stack: ["Snowflake", "dbt Core", "Python", "GitHub Actions", "Netlify"],
+    metrics: [
+      { label: "dbt Tests", value: "20/20" },
+      { label: "Cadence", value: "Daily" },
+      { label: "Cost", value: "₹0" },
+    ],
+    accent: "from-amber-400 to-orange-500",
+    flow: ["CoinGecko API", "Snowflake RAW", "dbt Staging", "dbt Marts", "Live Dashboard"],
+    link: "https://github.com/vinn27/crypto-market-elt",
+    liveUrl: "https://crypto-market-elt.netlify.app",
+    featured: true,
+  },
   {
     name: "WikiPulse — Real-Time Wikipedia Edit Analytics",
     tagline: "Kafka-style streaming, 100% serverless",
@@ -143,9 +162,9 @@ export const projects: Project[] = [
       { label: "Delivery", value: "Upsert / CDC" },
     ],
     accent: "from-emerald-400 to-cyan-500",
+    flow: ["Wikipedia API", "Redpanda", "PySpark", "Neon Postgres", "Live Dashboard"],
     link: "https://github.com/vinn27/wikpulse",
     liveUrl: "https://wikpulse-live.netlify.app",
-    featured: true,
   },
   {
     name: "Job Radar — Job-Market Intelligence Pipeline",
